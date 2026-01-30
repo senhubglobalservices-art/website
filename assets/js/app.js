@@ -147,7 +147,7 @@ function renderPagination() {
   for (let i = 1; i <= pages; i++) {
     pagination.innerHTML += `
       <li class="page-item ${i === currentPage ? "active" : ""}">
-        <a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>
+        <a class="page-link" href="#products" onclick="goToPage(${i})">${i}</a>
       </li>
     `;
   }
