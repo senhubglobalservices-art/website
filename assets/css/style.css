@@ -28,3 +28,23 @@ body {
     padding: 70px 15px;
   }
 }
+
+/* ==========================
+   PAGINATION RESPONSIVE
+========================== */
+
+.pagination {
+  gap: 6px;
+}
+
+.pagination .page-item {
+  margin: 2px;
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .pagination .page-link {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+}
