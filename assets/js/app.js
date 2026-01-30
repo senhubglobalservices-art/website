@@ -1,12 +1,14 @@
+const defaultImage = "assets/images/products/default.png";
+
 const products = [
-  { name: "Kit Arduino Uno", price: "30 000 FCFA", image: "assets/images/products/arduino-uno.PNG" },
-  { name: "Kit Robot Voiture", price: "25 000 FCFA", image: "assets/images/products/kit-robot-voiture.PNG" },
-  { name: "Module Haut-parleurs", price: "4 000 FCFA", image: "assets/images/products/module-haut-parleur.PNG" },
-  { name: "Module DC Courant Continu", price: "2 500 FCFA", image: "assets/images/products/module-dc-courant-continu.PNG" },
-  { name: "PCB", price: "2 500 FCFA", image: "assets/images/products/pcb.PNG" },
-  { name: "Kit Maison Intelligente", price: "50 000 FCFA", image: "assets/images/products/kit-maison-intelligente.PNG" },
-  { name: "Capteur Débit d'Eau", price: "3 500 FCFA", image: "assets/images/products/capteur-debit-eau.PNG" },
-  { name: "Module GSM SIM900", price: "7 500 FCFA", image: "assets/images/products/module-gsm-sim-900.PNG" },
+  { name: "Kit Arduino Uno", price: "30 000 FCFA", image: "assets/images/products/arduino-uno.png" },
+  { name: "Kit Robot Voiture", price: "25 000 FCFA", image: "assets/images/products/kit-robot-voiture.png" },
+  { name: "Module Haut-parleurs", price: "4 000 FCFA", image: "assets/images/products/module-haut-parleur.png" },
+  { name: "Module DC Courant Continu", price: "2 500 FCFA", image: "assets/images/products/module-dc-courant-continu.png" },
+  { name: "PCB", price: "2 500 FCFA", image: "assets/images/products/pcb.png" },
+  { name: "Kit Maison Intelligente", price: "50 000 FCFA", image: "assets/images/products/kit-maison-intelligente.png" },
+  { name: "Capteur Débit d'Eau", price: "3 500 FCFA", image: "assets/images/products/capteur-debit-eau.png" },
+  { name: "Module GSM SIM900", price: "7 500 FCFA", image: "assets/images/products/module-gsm-sim-900.png" },
   { name: "ESP32", price: "Description du produit 8" },
   { name: "Module Bluetooth HC05", price: "Description du produit 9" },
   { name: "Capteur de mouvement PIR", price: "Description du produit 9" },
@@ -120,25 +122,31 @@ let filtered = [...products];
 const productList = document.getElementById("productList");
 const pagination = document.getElementById("pagination");
 
+
 function renderProducts() {
   productList.innerHTML = "";
   const start = (currentPage - 1) * productsPerPage;
   const pageItems = filtered.slice(start, start + productsPerPage);
 
-  pageItems.forEach(p => {
-    productList.innerHTML += `
-      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-        <div class="card h-100 shadow-sm text-center p-3">
-          <img src="${p.image}" class="img-fluid mb-2" alt="${p.name}">
-          <h6 class="fw-bold">${p.name}</h6>
-          <p class="text-primary fw-semibold">${p.price}</p>
-        </div>
+  pageItems.forEach((p, index) => {
+  const realIndex = products.indexOf(p);
+
+  productList.innerHTML += `
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="card h-100 shadow-sm text-center p-3"
+           onclick="openProductByIndex(${realIndex})">
+        <img src="${p.image || defaultImage}" class="img-fluid mb-2">
+        <h6 class="fw-bold">${p.name}</h6>
+        <p class="text-primary fw-semibold">${p.price || "Prix sur demande"}</p>
       </div>
-    `;
-  });
+    </div>
+  `;
+});
+
 
   renderPagination();
 }
+
 
 function renderPagination() {
   pagination.innerHTML = "";
@@ -166,3 +174,24 @@ document.getElementById("searchInput").addEventListener("input", e => {
 });
 
 renderProducts();
+
+
+function openProductByIndex(index) {
+  const product = products[index];
+
+  document.getElementById("modalTitle").textContent = product.name;
+  document.getElementById("modalPrice").textContent =
+    product.price || "Prix sur demande";
+  document.getElementById("modalDescription").textContent =
+    product.description || "Description non disponible.";
+  document.getElementById("modalImage").src =
+    product.image || defaultImage;
+
+  const message = `Bonjour, je souhaite commander : ${product.name}`;
+  document.getElementById("whatsappLink").href =
+    `https://wa.me/221772071334?text=${encodeURIComponent(message)}`;
+
+  new bootstrap.Modal(
+    document.getElementById("productModal")
+  ).show();
+}
